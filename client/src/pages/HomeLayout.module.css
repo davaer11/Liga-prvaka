@@ -1,0 +1,33 @@
+.home-elements {
+    border: 3px solid black;
+    border-radius: 10px;
+    height: 170px;
+    background-image: url('../assets/lp2.jpg');
+    background-size:cover;
+    background-position: center 30%;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+.home-elements div {
+   display: flex;
+   gap:10px;
+   margin-right: 5px; 
+}
+.home-elements button {
+    cursor: pointer;
+    background-color:  rgb(181, 27, 27);
+    border: 2px groove #8d9c62;
+    color: white;
+    padding: 15px 30px ;
+    border-radius: 10px;
+  }
+.home-elements p {
+    color: white; 
+    font-size: 60px;
+    padding-left: 190px;
+}
+.home-elements button:hover, button:active {
+    background-color: rgb(53, 31, 4);
+  }

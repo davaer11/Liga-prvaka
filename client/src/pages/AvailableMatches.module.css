@@ -1,0 +1,20 @@
+.matches {
+    background-color: rgb(188, 188, 206);
+    color:black;
+    width: 800px;
+    margin-left: 60px;
+    border: 1px solid black;
+    border-radius: 30px;
+}
+.matches button {
+    cursor: pointer;
+    background-color:  rgb(181, 27, 27);
+    border: 2px groove #8d9c62;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    
+}
+.matches button:hover, button:active {
+    background-color: rgb(53, 31, 4);
+  }

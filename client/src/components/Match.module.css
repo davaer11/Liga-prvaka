@@ -1,0 +1,23 @@
+.match {
+    padding: 10px;
+}
+.match button {
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color:  rgb(99, 179, 99);
+    border: 2px groove #8d9c62;
+    color: white;
+    margin-top:15px;
+    
+}
+.match button:hover, button:active {
+    background-color: rgb(53, 31, 4);
+}
+.match div {
+    margin-left:400px;
+    margin-top: -30px;
+}
+.match input {
+    width:40px;
+}
