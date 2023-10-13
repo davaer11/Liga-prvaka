@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const GroupSchema = new mongoose.Schema({
+	groupName: {
+		type: String,
+	},
+
 	teams: {
 		type: [String],
 		required: true,

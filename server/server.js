@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { User, UserSchema } = require('./models/User');
 const { RoundResults } = require('./models/RoundResults');
 const InitialForm = require('./models/InitialForm');
+const { Group, GroupSchema } = require('./models/Group');
 const { roundNumber, availableMatches } = require('./availableMatches');
 const { groups, createGroups } = require('./createDocuments');
 
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const secretKey = 'liga_prvaka2023';
-//createGroups(groups); - kreira grupe i utakmice
+createGroups(groups); //- kreira grupe i utakmice
 
 app.post('/register', async (req, res) => {
 	const myUser = new User(req.body);
@@ -114,6 +115,28 @@ app.put('/initialForm', async (req, res) => {
 	} catch (error) {
 		console.log('Cannot update user with provided username');
 	}
+});
+
+app.get('/initialForm', async (req, res) => {
+	const groups = await Group.find({});
+
+	const groupsForClient = [];
+	for (let i = 0; i < groups.length; i++) {
+		groupsForClient.push({
+			groupName: groups[i].groupName,
+			teams: groups[i].teams,
+		});
+	}
+	groupsForClient.sort((first, second) => {
+		const firstLowerCase = first.groupName.toLowerCase();
+		const secondLowerCase = second.groupName.toLowerCase();
+
+		const firstLetter = firstLowerCase.charAt(firstLowerCase.length - 1);
+		const secondLetter = secondLowerCase.charAt(secondLowerCase.length - 1);
+
+		return firstLetter.localeCompare(secondLetter);
+	});
+	return res.json(groupsForClient);
 });
 
 app.get('/availableMatches', async (req, res) => {
