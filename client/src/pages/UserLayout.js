@@ -1,35 +1,41 @@
 import React, { useContext } from 'react';
 import classes from './HomeLayout.module.css';
-import {Outlet, useNavigate} from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import AuthContext from '../store/auth-context';
 
 const UserLayout = (props) => {
-    
-    const navigate = useNavigate();
-    const authContext = useContext(AuthContext);
+	const authContext = useContext(AuthContext);
+	const user = authContext.user;
 
-    let text = 'Welcome ' + authContext.user.userName + '!';
+	let text = 'Welcome ' + authContext.user.userName + '!';
 
-    const navigateHandler = (value) => {
-        if (value === "logout") {
-            authContext.logout();
-            navigate('../');
-        }
-    }
-   
+	const handleOnClick = (value) => {
+		if (value === 'logout') {
+			authContext.logout();
+		}
+	};
 
-    return (
-        <>
-            <div className= {classes['home-elements']}>
-                <p>{text}</p>
-                <div>
-                    <button onClick = {() => (navigateHandler("logout"))}>Logout</button>
-                </div>
-            </div>
-            <Outlet />
-        </>
-    );
-
-}
+	return (
+		<>
+			<div className={classes['home-elements']}>
+				<p>{text}</p>
+				<div>
+					<Link to='availableMatches'>
+						<button>AvailableMatches</button>
+					</Link>
+					<Link to='initialForm'>
+						<button onClick={() => handleOnClick('initialForm')}>
+							InitialForm
+						</button>
+					</Link>
+					<Link to='../'>
+						<button onClick={() => handleOnClick('logout')}>Logout</button>
+					</Link>
+				</div>
+			</div>
+			<Outlet />
+		</>
+	);
+};
 
 export default UserLayout;

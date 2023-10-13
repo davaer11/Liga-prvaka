@@ -1,26 +1,31 @@
-const mongoose = require("mongoose");
-//const InitialFormSchema = require('./InitialForm').InitialFormSchema;
+const mongoose = require('mongoose');
+const RoundResultsSchema = require('./RoundResults').RoundResultsSchema;
 
 const UserSchema = new mongoose.Schema({
-    userName: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    totalPoints: {
-        type: Number,
-        default: 0
-    },
-    initialFormSubmitted: {
-        type: Boolean,
-        default: false
-    },
-    
+	userName: {
+		type: String,
+		required: true,
+	},
+	password: {
+		type: String,
+		required: true,
+	},
+	totalPoints: {
+		type: Number,
+		default: 0,
+	},
+	initialFormSubmitted: {
+		type: Boolean,
+		default: false,
+	},
+	roundResults: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'RoundResults',
+		},
+	],
 });
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-module.exports = {User, UserSchema};
+module.exports = { User, UserSchema };
