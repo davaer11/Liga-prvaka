@@ -7,7 +7,7 @@ const UserLayout = (props) => {
 	const authContext = useContext(AuthContext);
 	const user = authContext.user;
 
-	let text = 'Welcome ' + authContext.user.userName + '!';
+	let text = 'Welcome ' + user.userName + '!';
 
 	const handleOnClick = (value) => {
 		if (value === 'logout') {
@@ -24,9 +24,7 @@ const UserLayout = (props) => {
 						<button>AvailableMatches</button>
 					</Link>
 					<Link to='initialForm'>
-						<button onClick={() => handleOnClick('initialForm')}>
-							InitialForm
-						</button>
+						<button>InitialForm</button>
 					</Link>
 					<Link to='../'>
 						<button onClick={() => handleOnClick('logout')}>Logout</button>

@@ -2,8 +2,8 @@ import React from 'react';
 import classes from './AvailableMatches.module.css';
 import { useEffect, useState } from 'react';
 import MatchesInGroup from '../components/MatchesInGroup';
-import { useJwt } from 'react-jwt';
 import { useNavigate } from 'react-router-dom';
+import { useGetUserId } from '../utils/userUtils';
 
 const AvailableMatches = () => {
 	const [availableMatches, setAvailableMatches] = useState([]);
@@ -12,8 +12,7 @@ const AvailableMatches = () => {
 
 	const navigate = useNavigate();
 
-	const jwtToken = localStorage.getItem('user_token');
-	const { decodedToken } = useJwt(jwtToken);
+	const userId = useGetUserId();
 
 	const fetchMatches = async () => {
 		try {
@@ -58,8 +57,6 @@ const AvailableMatches = () => {
 		event.preventDefault();
 
 		try {
-			const userId = decodedToken.userId;
-
 			const response = await fetch('/availableMatches', {
 				method: 'POST',
 				headers: {

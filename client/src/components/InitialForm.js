@@ -1,62 +1,48 @@
 import classes from './InitialForm.module.css';
 import Group from './Group';
-import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-//import jwt from 'jsonwebtoken';
-import { useJwt } from 'react-jwt';
+import { useState, useEffect, useContext, useReducer } from 'react';
+import { useGetUserId } from '../utils/userUtils';
 import AuthContext from '../store/auth-context';
 
-const DUMMY_GROUPS = [
-	{
-		groupName: 'group A',
-		teams: ['Dinamo', 'Schalke', 'Bayern Munich', 'Barcelona'],
-	},
-	{
-		groupName: 'group B',
-		teams: ['Hajduk', 'PSG', 'Manchester City', 'AC Milan'],
-	},
-	{
-		groupName: 'group C',
-		teams: ['Real Madrid', 'Chelsea', 'Liverpool', 'Inter'],
-	},
-	{
-		groupName: 'group D',
-		teams: ['Ajax', 'Sevilla', 'RB Leipzig', 'FC Porto'],
-	},
-];
-let groupOrders = ['', '', '', ''];
+const initialFormData = {
+	leagueWinner: '',
+	bestScorer: '',
+	groupOrders: [],
+};
+const initialFormDataReducer = (state, action) => {
+	if (action.type === 'SET_LEAGUE_WINNER') {
+		return { ...state, leagueWinner: action.payload };
+	}
+	if (action.type === 'SET_BEST_SCORER') {
+		return { ...state, bestScorer: action.payload };
+	}
+	if (action.type === 'SET_GROUP_ORDERS') {
+		return { ...state, groupOrders: [...state.groupOrders, action.payload] };
+	}
+};
 
-const InitialForm = (props) => {
-	//TODO: ne može se submitat ako se nisu ispunila bestScorer i leagueWinner
-	const [hideGroupArray, setHideGroupArray] = useState([
-		false,
-		false,
-		false,
-		false,
-	]);
-	const [leagueWinner, setLeagueWinner] = useState('');
-	const [bestScorer, setBestScorer] = useState('');
+const InitialForm = () => {
+	const [formData, dispatch] = useReducer(
+		initialFormDataReducer,
+		initialFormData
+	);
 
-	const navigate = useNavigate();
+	const [hideGroups, setHideGroups] = useState([false, false, false, false]);
+	const [showIndividualGuesses, setShowIndividualGuesses] = useState(true);
+	const [groups, setGroups] = useState([]);
 
-	const jwtToken = localStorage.getItem('user_token');
-	const { decodedToken } = useJwt(jwtToken);
+	const userId = useGetUserId();
 
 	const authCtx = useContext(AuthContext);
 
-	useEffect(() => {
-		if (hideGroupArray.every((hideElement) => hideElement)) {
-			try {
-				const formData = {
-					leagueWinner: leagueWinner,
-					bestScorer: bestScorer,
-					groupAOrder: groupOrders[0],
-					groupBOrder: groupOrders[1],
-					groupCOrder: groupOrders[2],
-					groupDOrder: groupOrders[3],
-				};
-				const userId = decodedToken.userId;
+	let canPostFormData =
+		formData.leagueWinner !== '' &&
+		formData.bestScorer !== '' &&
+		formData.groupOrders.length === 8;
 
+	useEffect(() => {
+		if (canPostFormData) {
+			try {
 				fetch('/initialForm', {
 					method: 'POST',
 					headers: {
@@ -73,51 +59,77 @@ const InitialForm = (props) => {
 			} catch (error) {
 				console.log(error.message);
 			}
-			setLeagueWinner('');
-			setBestScorer('');
-			setHideGroupArray([false, false, false, false]);
-			groupOrders = ['', '', '', ''];
-			navigate('../AvailableMatches');
 		}
-	}, [
-		hideGroupArray,
-		bestScorer,
-		leagueWinner,
-		decodedToken,
-		navigate,
-		authCtx,
-	]);
+	}, [userId, formData, canPostFormData]); //kad uključim authCtx ovdje onda se post napravi 6 puta - kako to riješit ??
 
-	const handleGroupSubmit = (groupNumber) => {
-		const groupArray = [...hideGroupArray];
+	useEffect(() => {
+		try {
+			fetch('/initialForm')
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error('Response is not good -> ' + response.status);
+					}
+					return response.json();
+				})
+				.then((data) => {
+					setGroups(data);
+				});
+		} catch (error) {
+			console.log(error.message);
+		}
+	}, []);
+
+	const handleGroupSubmit = (groupNumber, groupOrder) => {
+		const groupArray = [...hideGroups];
 		groupArray[groupNumber] = true;
-		setHideGroupArray(groupArray);
-	};
-	const orderGroup = (groupOrder, groupNumber) => {
-		groupOrders[groupNumber] = groupOrder;
+		setHideGroups(groupArray);
+
+		dispatch({
+			type: 'SET_GROUP_ORDERS',
+			payload: groupOrder,
+		});
 	};
 
 	return (
 		<div className={classes['initial-form-container']}>
-			<form className={classes.form}>
-				<div className={classes['input-group']}>
-					<label>Pobjednik lige prvaka: </label>
-					<input
-						value={leagueWinner}
-						type='text'
-						onChange={(event) => setLeagueWinner(event.target.value)}
-					></input>
-				</div>
+			{showIndividualGuesses && (
+				<form
+					className={classes.form}
+					onSubmit={(event) => {
+						event.preventDefault();
+						setShowIndividualGuesses(false);
+					}}
+				>
+					<div className={classes['input-group']}>
+						<label>Pobjednik lige prvaka: </label>
+						<input
+							value={formData.leagueWinner}
+							type='text'
+							onChange={(event) =>
+								dispatch({
+									type: 'SET_LEAGUE_WINNER',
+									payload: event.target.value,
+								})
+							}
+						></input>
+					</div>
 
-				<div className={classes['input-group']}>
-					<label>Najbolji strijelac: </label>
-					<input
-						value={bestScorer}
-						type='text'
-						onChange={(event) => setBestScorer(event.target.value)}
-					></input>
-				</div>
-			</form>
+					<div className={classes['input-group']}>
+						<label>Najbolji strijelac: </label>
+						<input
+							value={formData.bestScorer}
+							type='text'
+							onChange={(event) =>
+								dispatch({
+									type: 'SET_BEST_SCORER',
+									payload: event.target.value,
+								})
+							}
+						></input>
+					</div>
+					<button type='submit'>OK</button>
+				</form>
+			)}
 			<p>
 				<strong>INFO:</strong> U polje ispod svake grupe unesite poredak od
 				prvog do zadnjeg mjesta. Unesite imena klubova iz grupe i odvojite ih
@@ -125,20 +137,14 @@ const InitialForm = (props) => {
 			</p>
 			<section>
 				<ul>
-					{DUMMY_GROUPS.map((group, index) => (
-						<>
-							<Group
-								key={index}
-								group={group}
-								groupNumber={index}
-								hide={hideGroupArray[index]}
-								orderGroup={orderGroup}
-								submitGroup={handleGroupSubmit}
-							></Group>
-							{/*{!hideGroupArray[index] && (
-								<button onClick={() => handleGroupSubmit(index)}>Submit</button>
-							)}*/}
-						</>
+					{groups.map((group, index) => (
+						<Group
+							key={index}
+							group={group}
+							groupNumber={index}
+							hide={hideGroups[index]}
+							submitGroup={handleGroupSubmit}
+						></Group>
 					))}
 				</ul>
 			</section>
