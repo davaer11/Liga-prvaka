@@ -1,4 +1,4 @@
-.form {
+/*.form {
     text-align: center;
     display: grid;
     gap: 2rem;
@@ -30,4 +30,13 @@
 }
 .form button:hover {
     background-color: rgb(53, 31, 4);
+}*/
+
+.form {
+    width: '300px';
+	padding: '30px';
+	
+}
+.form label {
+    font-weight: bold;
 }

@@ -1,5 +1,5 @@
-const { Group } = require('./models/Group');
-const { Match } = require('./models/Match');
+const { Group } = require('../models/Group');
+const { Match } = require('../models/Match');
 
 const groups = [
 	['Bayern Munich', 'Galatasaray', 'Kopenhagen', 'Man Utd'],

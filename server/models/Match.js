@@ -12,6 +12,10 @@ const MatchSchema = new mongoose.Schema({
 	result: {
 		type: String,
 	},
+	round: {
+		type: Number,
+		default: -1, //-1 znači da nije utakmica kola već završnice turnira
+	},
 });
 
 const Match = mongoose.model('Match', MatchSchema);

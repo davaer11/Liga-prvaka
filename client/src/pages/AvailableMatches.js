@@ -52,6 +52,7 @@ const AvailableMatches = () => {
 		}
 		setRoundResults(updatedResults);
 	};
+	console.log(roundResults);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();

@@ -2,31 +2,32 @@ import classes from './Match.module.css';
 
 import { useEffect, useState } from 'react';
 const Match = ({ matchId, match, onSetRoundResults }) => {
-	const [selectedValue, setSelectedValue] = useState('');
 	const teams = match.split('-');
 
 	const [leftInputValue, setLeftInputValue] = useState(0);
 	const [rightInputValue, setRightInputValue] = useState(0);
 
-	useEffect(() => {
-		if (selectedValue.length > 0) {
-			const matchResult = {
-				id: matchId,
-				winningTeam: selectedValue,
-				result: `${leftInputValue}:${rightInputValue}`,
-			};
-			onSetRoundResults(matchResult);
-		}
-	}, [selectedValue, leftInputValue, rightInputValue]);
+	const [hideMatch, setHideMatch] = useState(false);
 
-	const toggleBtn = (btnType) => {
-		if (btnType === 'leftBtn') {
-			setSelectedValue(teams[0]);
-		}
-		if (btnType === 'rightBtn') {
-			setSelectedValue(teams[1]);
-		}
+	let winTeam = '';
+
+	if (leftInputValue === rightInputValue) {
+		winTeam = '-';
+	} else if (leftInputValue > rightInputValue) {
+		winTeam = teams[0];
+	} else if (leftInputValue < rightInputValue) {
+		winTeam = teams[1];
+	}
+	const handleClick = (event) => {
+		const matchResult = {
+			id: matchId,
+			winningTeam: winTeam,
+			result: `${leftInputValue}:${rightInputValue}`,
+		};
+		onSetRoundResults(matchResult);
+		setHideMatch(true);
 	};
+
 	const handleInputChange = (inputType, value) => {
 		if (inputType === 'leftInput') {
 			setLeftInputValue(value);
@@ -36,46 +37,47 @@ const Match = ({ matchId, match, onSetRoundResults }) => {
 		}
 	};
 
-	return (
-		<div className={classes.match}>
-			<button
-				type='button'
-				id='leftBtn'
-				onClick={() => toggleBtn('leftBtn')}
-				style={{ backgroundColor: selectedValue === teams[0] ? 'green' : '' }}
-			>
-				{teams[0]}
-			</button>
-			{' - '}
-			<button
-				type='button'
-				id='rightBtn'
-				onClick={() => toggleBtn('rightBtn')}
-				style={{ backgroundColor: selectedValue === teams[1] ? 'green' : '' }}
-			>
-				{teams[1]}
-			</button>
+	if (hideMatch) {
+		return (
 			<div>
-				<input
-					type='number'
-					min='0'
-					value={leftInputValue}
-					onChange={(event) =>
-						handleInputChange('leftInput', event.target.value)
-					}
-				></input>
-				{' - '}
-				<input
-					type='number'
-					min='0'
-					value={rightInputValue}
-					onChange={(event) =>
-						handleInputChange('rightInput', event.target.value)
-					}
-				></input>
+				<span> Match submitted!</span>
 			</div>
-		</div>
-	);
+		);
+	} else {
+		return (
+			<div className={classes.match}>
+				<span style={{ color: winTeam === teams[0] ? 'blue' : 'black' }}>
+					{teams[0]}
+				</span>
+				{' - '}
+				<span style={{ color: winTeam === teams[1] ? 'blue' : 'black' }}>
+					{teams[1]}
+				</span>
+				<div>
+					<input
+						type='number'
+						min='0'
+						value={leftInputValue}
+						onChange={(event) =>
+							handleInputChange('leftInput', event.target.value)
+						}
+					></input>
+					{' - '}
+					<input
+						type='number'
+						min='0'
+						value={rightInputValue}
+						onChange={(event) =>
+							handleInputChange('rightInput', event.target.value)
+						}
+					></input>
+					<button type='button' onClick={handleClick}>
+						OK
+					</button>
+				</div>
+			</div>
+		);
+	}
 };
 
 export default Match;

@@ -6,7 +6,7 @@ const { RoundResults } = require('./models/RoundResults');
 const InitialForm = require('./models/InitialForm');
 const { Group, GroupSchema } = require('./models/Group');
 const { roundNumber, availableMatches } = require('./availableMatches');
-const { groups, createGroups } = require('./createDocuments');
+const { groups, createGroups } = require('./utils/createDocuments');
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const secretKey = 'liga_prvaka2023';
-createGroups(groups); //- kreira grupe i utakmice
+//createGroups(groups); //- kreira grupe i utakmice
 
 app.post('/register', async (req, res) => {
 	const myUser = new User(req.body);
@@ -136,6 +136,7 @@ app.get('/initialForm', async (req, res) => {
 
 		return firstLetter.localeCompare(secondLetter);
 	});
+	console.log(groupsForClient.length);
 	return res.json(groupsForClient);
 });
 
@@ -169,6 +170,28 @@ app.post('/availableMatches', async (req, res) => {
 		res.status(500).json({ error: 'Internal server error' });
 	}
 });
+
+app.get('/rankings', async (req, res) => {
+	const usernamesWithPoints = await User.aggregate([
+		{
+			$project: {
+				userName: 1,
+				totalPoints: 1,
+				numOfRounds: { $size: '$roundResults' },
+				_id: 0,
+			},
+		},
+		{
+			$sort: {
+				totalPoints: -1, //descending order
+			},
+		},
+	]).exec();
+
+	return res.json(usernamesWithPoints);
+});
+
+app.get('/userStats', async (req, res) => {});
 
 app.listen(5000, (req, res) => {
 	console.log('Server started on port 5000!');

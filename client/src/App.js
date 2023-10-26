@@ -8,14 +8,21 @@ import InitialForm from './components/InitialForm';
 import AuthProvider from './store/AuthProvider';
 import AvailableMatches from './pages/AvailableMatches';
 import UserStats from './pages/UserStats';
+import Rankings from './pages/Rankings';
+import Home from './pages/Home';
 
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <HomeLayout />,
 		children: [
+			{
+				path: '/home',
+				element: <Home />,
+			},
 			{
 				path: '/register',
 				element: <Register />,
@@ -41,6 +48,10 @@ const router = createBrowserRouter([
 			{
 				path: '/user/availableMatches',
 				element: <AvailableMatches />,
+			},
+			{
+				path: '/user/rankings',
+				element: <Rankings />,
 			},
 		],
 	},
