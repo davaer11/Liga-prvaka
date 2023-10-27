@@ -1,14 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 const { User, UserSchema } = require('./models/User');
 const { RoundResults } = require('./models/RoundResults');
 const InitialForm = require('./models/InitialForm');
 const { Group, GroupSchema } = require('./models/Group');
-const { roundNumber, availableMatches } = require('./availableMatches');
 const { groups, createGroups } = require('./utils/createDocuments');
+const userController = require('./controllers/userController');
+
+//how to organize route files
 
 const app = express();
+const CURRENT_ROUND_INDEX = 2;
+
+//https://jsoneditoronline.org/#left=local.cucede&right=local.qeyulu -JSON FORMATTER
 
 mongoose
 	.connect(
@@ -27,38 +33,38 @@ const secretKey = 'liga_prvaka2023';
 //createGroups(groups); //- kreira grupe i utakmice
 
 app.post('/register', async (req, res) => {
-	const myUser = new User(req.body);
-	console.log(myUser);
+	const user = req.body;
 	try {
-		const allUsers = await User.find({}); //get all users from mongoDB
-		const foundUser = allUsers.find(
-			(user) => user.userName === myUser.userName
-		);
-
-		if (foundUser) {
+		const userExists = await userController.findUser(user.userName);
+		if (userExists) {
 			res.status(401).send('User with that username already exists!');
 		} else {
-			await myUser.save();
-			res.status(201).send(myUser);
+			await userController.createUser(user);
+			res.status(200).send('User is successfully created!');
 		}
 	} catch (error) {
-		res.status(500).send(error);
+		console.error('Error:', error);
+		res.status(500).json({ error: error.message });
 	}
 });
 app.post('/login', async (req, res) => {
-	const user = req.body;
+	const { userName, password } = req.body;
+	try {
+		const user = await userController.findUser(userName);
 
-	const foundUser = await User.findOne({
-		userName: user.userName,
-		password: user.password,
-	}).exec();
-	if (foundUser) {
-		const token = jwt.sign({ userId: foundUser._id }, secretKey, {
+		if (!user) {
+			res.status(401).json({ error: 'User not found!' });
+		}
+
+		await userController.checkIfPasswordIsCorrect(password, user.password);
+
+		const token = jwt.sign({ userId: user._id }, secretKey, {
 			expiresIn: '1h',
 		});
-		res.json({ token, foundUser });
-	} else {
-		res.status(404).send('User not found!');
+		res.json({ token, user });
+	} catch (error) {
+		console.error('Error:', error);
+		res.status(500).json({ error: error.message });
 	}
 });
 app.post('/initialForm', async (req, res) => {
@@ -141,8 +147,13 @@ app.get('/initialForm', async (req, res) => {
 });
 
 app.get('/availableMatches', async (req, res) => {
-	const matches = Object.entries(availableMatches).map(([key, value]) => value);
-	res.json({ roundNumber, matches });
+	try {
+		const data = fs.readFileSync('utils/availableMatches.json', 'utf-8'); //data je string
+		const jsonObject = JSON.parse(data);
+		res.json(jsonObject[CURRENT_ROUND_INDEX]);
+	} catch (error) {
+		res.json(error);
+	}
 });
 app.post('/availableMatches', async (req, res) => {
 	try {

@@ -26,10 +26,10 @@ const AuthProvider = (props) => {
 
 			const serverUserData = await response.json();
 			const { token, ...serverUser } = serverUserData;
-			setUser(serverUser.foundUser);
+			setUser(serverUser.user);
 			setIsLoggedIn(true);
 			localStorage.setItem('user_token', token);
-			return { msg: 'Login successfull!', serverUser: serverUser.foundUser };
+			return { msg: 'Login successfull!', serverUser: serverUser.user };
 		} catch (error) {
 			return error.message;
 		}

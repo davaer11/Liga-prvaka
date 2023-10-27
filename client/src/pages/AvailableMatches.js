@@ -22,9 +22,9 @@ const AvailableMatches = () => {
 				throw new Error();
 			}
 
-			const { roundNumber, matches } = await response.json();
-			setAvailableMatches(matches);
-			setRoundNumber(roundNumber);
+			const matchesObj = await response.json();
+			setAvailableMatches(matchesObj.availableMatches);
+			setRoundNumber(matchesObj.roundNumber);
 		} catch (error) {
 			console.log("Couldn't fetch data from server!!");
 		}
@@ -77,7 +77,7 @@ const AvailableMatches = () => {
 	return (
 		<form className={classes.matches} onSubmit={handleSubmit}>
 			<ul>
-				{`Kolo: ${roundNumber}.`}
+				{`Round: ${roundNumber}.`}
 				{availableMatches.map((groupMatches, groupIndex) => (
 					<MatchesInGroup
 						onSetRoundResults={handleRoundResults}
