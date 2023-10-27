@@ -1,0 +1,224 @@
+[
+    {
+      "roundNumber": 1,
+      "availableMatches": [
+        [
+          "Bayern-Manchester Utd",
+          "Galatasaray-FC Kopenhagen"
+        ],
+        [
+          "Sevilla-Lens",
+          "Arsenal-PSV"
+        ],
+        [
+          "Real Madrid-Union Berlin",
+          "Braga-Napoli"
+        ],
+        [
+          "Benfica-Salzburg",
+          "Real Sociedad-Inter"
+        ],
+        [
+          "Lazio-Atletico Madrid",
+          "Feyenoord-Celtic"
+        ],
+        [
+          "Milan-Newcastle",
+          "PSG-Borussia Dortmund"
+        ],
+        [
+          "Young Boys-Leipzig",
+          "Manchester City-Crvena Zvezda"
+        ],
+        [
+          "Barcelona-Antwerp",
+          "Shakhtar-Porto"
+        ]
+      ]
+    },
+    {
+      "roundNumber": 2,
+      "availableMatches": [
+        [
+          "Manchester Utd-Galatasaray",
+          "FC Kopenhagen-Bayern"
+        ],
+        [
+          "Lens-Arsenal",
+          "PSV-Sevilla"
+        ],
+        [
+          "Napoli-Real Madrid",
+          "Union Berlin-Braga"
+        ],
+        [
+          "Salzburg-Real Sociedad",
+          "Inter-Benfica"
+        ],
+        [
+          "Atletico Madrid-Feyenoord",
+          "Celtic-Lazio"
+        ],
+        [
+          "Newcastle-PSG",
+          "Borussia Dortmund-Milan"
+        ],
+        [
+          "Leipzig-Manchester City",
+          "Crvena Zvezda-Young Boys"
+        ],
+        [
+          "Antwerp-Shakhtar",
+          "Porto-Barcelona"
+        ]
+      ]
+    },
+    {
+      "roundNumber": 3,
+      "availableMatches": [
+        [
+          "Galatasaray-Bayern",
+          "Manchester Utd-FC Kopenhagen"
+        ],
+        [
+          "Sevilla-Arsenal",
+          "Lens-PSV"
+        ],
+        [
+          "Braga-Real Madrid",
+          "Union Berlin-Napoli"
+        ],
+        [
+          "Inter-Salzburg",
+          "Benfica-Real Sociedad"
+        ],
+        [
+          "Celtic-Atletico Madrid",
+          "Feyenoord-Lazio"
+        ],
+        [
+          "Newcastle-Borussia Dortmund",
+          "PSG-Milan"
+        ],
+        [
+          "Leipzig-Crvena Zvezda",
+          "Young Boys-Manchester City"
+        ],
+        [
+          "Barcelona-Shakhtar",
+          "Antwerp-Porto"
+        ]
+      ]
+    },
+    {
+      "roundNumber": 4,
+      "availableMatches": [
+        [
+          "FC Kopenhagen-Manchester Utd",
+          "Bayern-Galatasaray"
+        ],
+        [
+          "PSV-Lens",
+          "Arsenal-Sevilla"
+        ],
+        [
+          "Napoli-Union Berlin",
+          "Real Madrid-Braga"
+        ],
+        [
+          "Salzburg-Inter",
+          "Real Sociedad-Benfica"
+        ],
+        [
+          "Lazio-Feyenoord",
+          "Atletico Madrid-Celtic"
+        ],
+        [
+          "Milan-PSG",
+          "Borussia Dortmund-Newcastle"
+        ],
+        [
+          "Crvena Zvezda-Leipzig",
+          "Manchester City-Young Boys"
+        ],
+        [
+          "Porto-Antwerp",
+          "Shakhtar-Barcelona"
+        ]
+      ]
+    },
+    {
+      "roundNumber": 5,
+      "availableMatches": [
+        [
+          "Galatasaray-Manchester Utd",
+          "Bayern-FC Kopenhagen"
+        ],
+        [
+          "Sevilla-PSV",
+          "Arsenal-Lens"
+        ],
+        [
+          "Braga-Union Berlin",
+          "Real Madrid-Napoli"
+        ],
+        [
+          "Benfica-Inter",
+          "Real Sociedad-Salzburg"
+        ],
+        [
+          "Lazio-Celtic",
+          "Feyenoord-Atletico Madrid"
+        ],
+        [
+          "PSG-Newcastle",
+          "Milan-Borussia Dortmund"
+        ],
+        [
+          "Manchester City-Leipzig",
+          "Young Boys-Crvena Zvezda"
+        ],
+        [
+          "Shakhtar-Antwerp",
+          "Barcelona-Porto"
+        ]
+      ]
+    },
+    {
+      "roundNumber": 6,
+      "availableMatches": [
+        [
+          "Manchester Utd-Bayern",
+          "FC Kopenhagen-Galatasaray"
+        ],
+        [
+          "Lens-Sevilla",
+          "PSV-Arsenal"
+        ],
+        [
+          "Union Berlin-Real Madrid",
+          "Napoli-Braga"
+        ],
+        [
+          "Inter-Real Sociedad",
+          "Salzburg-Benfica"
+        ],
+        [
+          "Atletico Madrid-Lazio",
+          "Celtic-Feyenoord"
+        ],
+        [
+          "Borussia Dortmund-PSG",
+          "Newcastle-Milan"
+        ],
+        [
+          "Crvena Zvezda-Manchester City",
+          "Leipzig-Young Boys"
+        ],
+        [
+          "Antwerp-Barcelona",
+          "Porto-Shakhtar"
+        ]
+      ]
+    }
+  ]
