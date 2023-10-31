@@ -12,7 +12,7 @@ const Match = ({ matchId, match, onSetRoundResults }) => {
 	let winTeam = '';
 
 	if (leftInputValue === rightInputValue) {
-		winTeam = '-';
+		winTeam = 'x';
 	} else if (leftInputValue > rightInputValue) {
 		winTeam = teams[0];
 	} else if (leftInputValue < rightInputValue) {
@@ -21,8 +21,9 @@ const Match = ({ matchId, match, onSetRoundResults }) => {
 	const handleClick = (event) => {
 		const matchResult = {
 			id: matchId,
+			match: match,
 			winningTeam: winTeam,
-			result: `${leftInputValue}:${rightInputValue}`,
+			result: `${leftInputValue}-${rightInputValue}`,
 		};
 		onSetRoundResults(matchResult);
 		setHideMatch(true);

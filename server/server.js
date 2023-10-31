@@ -9,12 +9,17 @@ const { Group, GroupSchema } = require('./models/Group');
 const { groups, createGroups } = require('./utils/createDocuments');
 const userController = require('./controllers/userController');
 
+const {
+	readRealResults,
+	calculatePointsPerRound,
+	countNumOfLines,
+} = require('./utils/calculatePoints');
+const { UserStats } = require('./models/UserStats');
+
 //how to organize route files
 
 const app = express();
-const CURRENT_ROUND_INDEX = 2;
-
-//https://jsoneditoronline.org/#left=local.cucede&right=local.qeyulu -JSON FORMATTER
+const CURRENT_ROUND_INDEX = 1;
 
 mongoose
 	.connect(
@@ -30,7 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const secretKey = 'liga_prvaka2023';
-//createGroups(groups); //- kreira grupe i utakmice
 
 app.post('/register', async (req, res) => {
 	const user = req.body;
@@ -161,7 +165,11 @@ app.post('/availableMatches', async (req, res) => {
 
 		const updatedRoundResults = roundResults.map((obj) => {
 			//mičem id
-			return { winningTeam: obj.winningTeam, result: obj.result };
+			return {
+				match: obj.match,
+				winningTeam: obj.winningTeam,
+				result: obj.result,
+			};
 		});
 
 		const newRoundResults = new RoundResults({
@@ -202,7 +210,70 @@ app.get('/rankings', async (req, res) => {
 	return res.json(usernamesWithPoints);
 });
 
-app.get('/userStats', async (req, res) => {});
+app.get('/userStats', async (req, res) => {
+	const userName = req.query.userName;
+
+	const user = await userController.findUser(userName);
+
+	const numOfLines = countNumOfLines('utils/resultsPerRounds.json'); //koliko se stvarno odigralo kola
+
+	const firstFalseIndex = user.pointsAreCalculated.findIndex(
+		(element) => element === false
+	);
+	const numOfSubmittedRounds = user.roundResults.length;
+
+	if (firstFalseIndex === 0 && numOfSubmittedRounds === 0) {
+		//user se prvi put logirao i pri tome nije niti jednu rundu submitao.
+		return res.json({ message: 'There is no stats for you!' });
+	}
+
+	console.log('first false index: ', firstFalseIndex);
+
+	//postoji neko kolo čiji bodovi nisu izračunati
+	if (firstFalseIndex < numOfSubmittedRounds) {
+		//nije izračunato neko kolo koje je odigrano
+		for (let i = firstFalseIndex; i < numOfSubmittedRounds; i++) {
+			const roundResultsRef = user.roundResults[i];
+			const userResults = await RoundResults.findOne({ _id: roundResultsRef });
+			readRealResults(i + 1, 'utils/resultsPerRounds.json')
+				.then(async (realRoundResults) => {
+					const pointsPerRound = calculatePointsPerRound(
+						userResults,
+						realRoundResults
+					);
+					const updateObj = {
+						$set: {
+							totalPoints: user.totalPoints + pointsPerRound,
+						},
+					};
+					updateObj.$set[`pointsAreCalculated.${i}`] = true;
+					await User.updateOne({ _id: user._id }, updateObj);
+
+					const statsData = {
+						$set: {
+							totalPoints: user.totalPoints + pointsPerRound,
+							[`pointsPerRounds.${i}`]: pointsPerRound,
+						},
+					};
+
+					const updatedUserStats = await UserStats.updateOne(
+						{ _id: user.userStats },
+						statsData
+					);
+				})
+				.catch((error) => {
+					console.log('Error: ', error);
+				});
+		}
+	}
+	//(svi veći indeksi znače da još nije izračunato za to kolo, ali to kolo još nije odigrano pa ne može bit račun)
+	const userStats = await UserStats.findById(user.userStats);
+
+	return res.json({
+		totalPoints: userStats.totalPoints,
+		pointsPerRounds: userStats.pointsPerRounds,
+	});
+});
 
 app.listen(5000, (req, res) => {
 	console.log('Server started on port 5000!');

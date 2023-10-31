@@ -8,6 +8,7 @@ const RoundResultsSchema = new mongoose.Schema({
 		type: [
 			{
 				id: { type: Number },
+				match: { type: String },
 				winningTeam: { type: String },
 				result: { type: String },
 			},

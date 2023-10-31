@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const RoundResultsSchema = require('./RoundResults').RoundResultsSchema;
+
 const bcrypt = require('bcrypt');
+
+const generateDefaultBooleanArray = (length, defaultValue) => {
+	return new Array(length).fill(defaultValue);
+};
 
 const UserSchema = new mongoose.Schema({
 	userName: {
@@ -19,12 +24,20 @@ const UserSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	pointsAreCalculated: {
+		type: [Boolean],
+		default: () => generateDefaultBooleanArray(6, false),
+	},
 	roundResults: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'RoundResults',
 		},
 	],
+	userStats: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'UserStats',
+	},
 });
 
 UserSchema.pre('save', async function (next) {

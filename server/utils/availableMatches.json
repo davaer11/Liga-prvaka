@@ -23,12 +23,12 @@
           "Feyenoord-Celtic"
         ],
         [
-          "Milan-Newcastle",
+          "AC Milan-Newcastle",
           "PSG-Borussia Dortmund"
         ],
         [
-          "Young Boys-Leipzig",
-          "Manchester City-Crvena Zvezda"
+          "Young Boys-RB Leipzig",
+          "Manchester City-Crvena zvezda"
         ],
         [
           "Barcelona-Antwerp",
@@ -61,11 +61,11 @@
         ],
         [
           "Newcastle-PSG",
-          "Borussia Dortmund-Milan"
+          "Borussia Dortmund-AC Milan"
         ],
         [
-          "Leipzig-Manchester City",
-          "Crvena Zvezda-Young Boys"
+          "RB Leipzig-Manchester City",
+          "Crvena zvezda-Young Boys"
         ],
         [
           "Antwerp-Shakhtar",
@@ -98,10 +98,10 @@
         ],
         [
           "Newcastle-Borussia Dortmund",
-          "PSG-Milan"
+          "PSG-AC Milan"
         ],
         [
-          "Leipzig-Crvena Zvezda",
+          "RB Leipzig-Crvena zvezda",
           "Young Boys-Manchester City"
         ],
         [
@@ -134,11 +134,11 @@
           "Atletico Madrid-Celtic"
         ],
         [
-          "Milan-PSG",
+          "AC Milan-PSG",
           "Borussia Dortmund-Newcastle"
         ],
         [
-          "Crvena Zvezda-Leipzig",
+          "Crvena zvezda-RB Leipzig",
           "Manchester City-Young Boys"
         ],
         [
@@ -172,11 +172,11 @@
         ],
         [
           "PSG-Newcastle",
-          "Milan-Borussia Dortmund"
+          "AC Milan-Borussia Dortmund"
         ],
         [
-          "Manchester City-Leipzig",
-          "Young Boys-Crvena Zvezda"
+          "Manchester City-RB Leipzig",
+          "Young Boys-Crvena zvezda"
         ],
         [
           "Shakhtar-Antwerp",
@@ -209,11 +209,11 @@
         ],
         [
           "Borussia Dortmund-PSG",
-          "Newcastle-Milan"
+          "Newcastle-AC Milan"
         ],
         [
-          "Crvena Zvezda-Manchester City",
-          "Leipzig-Young Boys"
+          "Crvena zvezda-Manchester City",
+          "RB Leipzig-Young Boys"
         ],
         [
           "Antwerp-Barcelona",

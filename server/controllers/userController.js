@@ -1,20 +1,24 @@
 const { User } = require('../models/User');
+const { UserStats } = require('../models/UserStats');
+
 const bcrypt = require('bcrypt');
 
-const getAllUsers = async (req, res) => {
-	//za sada ga ne koristim
+const getAllUsers = async () => {
 	try {
-		const users = await User.find();
-		res.json(users);
+		const users = await User.find({}).exec();
+		return users;
 	} catch (error) {
 		console.error('Cannot fetch users ', error);
-		res.status(500).json({ error: 'Internal server error' });
 	}
 };
 
 const createUser = async (user) => {
 	try {
+		const newUserStats = new UserStats();
+		await newUserStats.save();
+
 		const newUser = new User(user);
+		newUser.userStats = newUserStats._id;
 		await newUser.save();
 	} catch (error) {
 		console.error('Cannot create new user ', error);
